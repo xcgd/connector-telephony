@@ -87,7 +87,7 @@ class SmsSms(models.Model):
             self.write({
                 'state': 'error',
                 'error': _("Size of SMS should not be more than %s "
-                           "characters ") % self.sms.gateway_id.char_limit
+                           "characters ") % self.gateway_id.char_limit
             })
             self._cr.commit()
             return False
