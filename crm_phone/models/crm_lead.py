@@ -3,7 +3,7 @@
 # @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import models, fields, api
+from odoo import models, fields
 
 
 class CrmLead(models.Model):
@@ -11,11 +11,6 @@ class CrmLead(models.Model):
     _phone_name_sequence = 20
     _phone_name_fields = ['phone', 'mobile']
 
-    phonecall_ids = fields.One2many(
-        'crm.phonecall', 'opportunity_id', string='Phone Calls')
-    phonecall_count = fields.Integer(
-        compute='_compute_phonecall_count', string='Number of Phonecalls',
-        readonly=True)
     partner_address_mobile = fields.Char(
         string='Partner Contact Mobile', related='partner_id.mobile',
         readonly=True)
@@ -36,12 +31,3 @@ class CrmLead(models.Model):
             return res
         else:
             return super(CrmLead, self).name_get()
-
-    @api.depends('phonecall_ids')
-    def _compute_phonecall_count(self):
-        rg_res = self.env['crm.phonecall'].read_group(
-            [('opportunity_id', 'in', self.ids)],
-            ['opportunity_id'], ['opportunity_id'])
-        for rg_re in rg_res:
-            lead = self.browse(rg_re['opportunity_id'][0])
-            lead.phonecall_count = rg_re['opportunity_id_count']

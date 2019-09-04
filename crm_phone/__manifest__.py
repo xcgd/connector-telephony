@@ -28,16 +28,11 @@ for any help or question about this module.
     'external_dependencies': {'python': ['phonenumbers']},
     'conflicts': ['crm_voip'],
     'data': [
-        'security/phonecall_security.xml',
         'security/ir.model.access.csv',
-        'view/crm_phonecall.xml',
         'view/crm_lead.xml',
-        'view/res_partner.xml',
-        'view/res_users.xml',
         'wizard/number_not_found_view.xml',
-        'wizard/create_crm_phonecall_view.xml',
         ],
-    'demo': ['demo/crm_phonecall.xml'],
+    'demo': [],
     'installable': True,
     'auto_install': True,
 }
