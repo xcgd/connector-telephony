@@ -58,7 +58,8 @@ class TestCRMPhone(TransactionCase):
         name = pco.get_name_from_phone_number('0642774266')
         self.assertEquals(name, 'Pierre Paillet')
         name2 = pco.get_name_from_phone_number('0041216191010')
-        self.assertEquals(name2, 'C2C, Joël Grand-Guillaume')
+        # Fuzzy name match here as some modules may change that display name.
+        self.assertIn('Joël Grand-Guillaume'.lower(), name2.lower())
         # Test against the POS bug
         # https://github.com/OCA/connector-telephony/issues/113
         # When we edit/create a partner from the POS,
@@ -108,6 +109,10 @@ class TestCRMPhone(TransactionCase):
             'partner_id': partner4.id,
             'mobile': '(0) 2-391-43-75',
             })
+        # Ensure the partner country is available on the lead so the lead can
+        # they format the phone number. Some modules may have bypassed that so
+        # force it here.
+        lead4.country_id = partner4.country_id
         lead4._onchange_mobile_validation()
         self.assertEquals(lead4.mobile, '+32 2 391 43 75')
         pco = self.env['phone.common']
